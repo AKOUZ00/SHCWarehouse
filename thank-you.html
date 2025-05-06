@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Your Order</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2 class="my-4">Thank You for Your Order!</h2>
+    <p>Your order has been successfully submitted.</p>
+
+    <!-- Order Summary -->
+    <div id="orderSummary">
+        <h4>Order Summary:</h4>
+        <div id="summaryDetails"></div>
+        <p id="orderTime"></p>
+        <button class="btn btn-secondary" onclick="window.location.href='index.php'">Go Back to Order List</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Summary</button>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch order details from sessionStorage or localStorage
+        const order = JSON.parse(sessionStorage.getItem('order'));
+        const name = sessionStorage.getItem('name');
+        const location = sessionStorage.getItem('location');
+        const email = sessionStorage.getItem('email');
+        
+        // Display order summary in a table format
+        let summary = `<p><strong>Name:</strong> ${name}<br><strong>Email:</strong> ${email}<br><strong>Location:</strong> ${location}</p>`;
+        summary += `
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Item Number</th>
+                    <th>Product Link</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+        order.forEach(item => {
+            summary += `
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>${item.itemNumber}</td>
+                <td><a href="${item.link}" target="_blank">View Product</a></td>
+            </tr>`;
+        });
+
+        summary += `
+            </tbody>
+        </table>`;
+
+        document.getElementById('summaryDetails').innerHTML = summary;
+
+        // Display current time and date
+        const now = new Date();
+        document.getElementById('orderTime').innerHTML = `<strong>Date:</strong> ${now.toLocaleDateString()} <br><strong>Time:</strong> ${now.toLocaleTimeString()}`;
+    });
+</script>
+
+</body>
+</html>
